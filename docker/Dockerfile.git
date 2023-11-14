@@ -1,4 +1,4 @@
-FROM haskell:8.6.3 AS builder
+FROM haskell:9.4 AS builder
 
 RUN git clone http://github.com/camfort/camfort.git /camfort-git
 
@@ -22,7 +22,7 @@ RUN /root/.cabal/bin/hpack
 RUN cabal new-configure && cabal new-build && cabal new-install
 RUN cp $(find /camfort-git/ -name camfort -type f -executable -print) /
 
-FROM debian:stable-slim
+FROM debian:buster-slim
 RUN apt-get update && \
     apt-get install -y libflint-2.5.2 \
                        liblapack3 \

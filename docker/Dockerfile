@@ -1,7 +1,7 @@
-FROM haskell:8.6.3 AS builder
+FROM haskell:9.4 AS builder
 
-ADD https://github.com/camfort/camfort/archive/v0.906.tar.gz .
-RUN tar zxvf v0.906.tar.gz
+ADD https://github.com/camfort/camfort/archive/refs/tags/v1.2.0.tar.gz .
+RUN tar zxvf v1.2.0.tar.gz
 
 RUN apt-get update && \
     apt-get install -y git-core \
@@ -17,13 +17,13 @@ RUN apt-get update && \
 
 RUN cabal new-update && cabal new-install hpack
 
-WORKDIR /camfort-0.906
+WORKDIR /camfort-1.2.0
 
 RUN /root/.cabal/bin/hpack
 RUN cabal new-configure && cabal new-build && cabal new-install
 RUN cp $(find /camfort-*/ -name camfort -type f -executable -print) /
 
-FROM debian:stable-slim
+FROM debian:buster-slim
 RUN apt-get update && \
     apt-get install -y libflint-2.5.2 \
                        liblapack3 \
