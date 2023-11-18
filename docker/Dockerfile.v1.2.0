@@ -1,5 +1,8 @@
 FROM haskell:9.4 AS builder
 
+ADD https://github.com/camfort/camfort/archive/refs/tags/v1.2.0.tar.gz .
+RUN tar zxvf v1.2.0.tar.gz
+
 RUN apt-get update && \
     apt-get install -y git-core \
                        libblas-dev \
@@ -14,9 +17,7 @@ RUN apt-get update && \
 
 RUN cabal new-update && cabal new-install hpack
 
-COPY . /camfort-current
-
-WORKDIR /camfort-current
+WORKDIR /camfort-1.2.0
 
 RUN /root/.cabal/bin/hpack
 RUN cabal new-configure && cabal new-build && cabal new-install
